@@ -3,6 +3,7 @@ from selenium.webdriver.common.keys import Keys
 import time
 import urllib.request
 import os
+from concurrent import futures
 
 def make_folder(directory):
     print("{0} 디렉토리 생성".format(directory))
@@ -30,12 +31,30 @@ def image_crawling(word):
             opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
             urllib.request.install_opener(opener)
             urllib.request.urlretrieve(imgUrl, "{0}/{1}.jpg".format(word, i+1))
-            print("image{} 생성".format(i+1))
+            print("{0} image{} 생성".format(word, i+1))
         except Exception as e:
             print(e)
             
 
     driver.close()
+    return "---------{} download done---------".format(word)
 
 if __name__ == "__main__":
-    image_crawling("고양이")
+
+    search = ["고양이", "강아지"]
+    # thread_list = []
+    # for s in search:
+    #     tmp = Thread(target=image_crawling, args=(s))
+    #     tmp.start()
+    #     thread_list.append(tmp)
+    # print(thread_list)
+    # for thread in thread_list:
+    #     print('asdf')
+    #     thread.join()
+    # image_crawling("고양이")
+
+    with futures.ThreadPoolExecutor() as executor:
+        results = [executor.submit(image_crawling, s) for s in search]
+ 
+    for f in futures.as_completed(results):
+        print(f.result())
