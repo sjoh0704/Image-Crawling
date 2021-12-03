@@ -9,7 +9,7 @@ class ImageCrawling:
 
     @staticmethod
     def make_folder(directory):
-        print("images/{0} 디렉토리 생성".format(directory))
+        print("images/{0} directory creates".format(directory))
         try:
             if not os.path.exists(directory):
                 os.makedirs(directory)
@@ -36,7 +36,7 @@ class ImageCrawling:
                 opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/36.0.1941.0 Safari/537.36')]
                 urllib.request.install_opener(opener)
                 urllib.request.urlretrieve(imgUrl, "images/{0}/{1}.jpg".format(word, i+1))
-                print("{0} image{1} 생성".format(word, i+1))
+                print("{0} image{1} creates".format(word, i+1))
             except Exception as e:
                 print(e)
 
@@ -46,7 +46,7 @@ class ImageCrawling:
 if __name__ == "__main__":
     ImageCrawling.make_folder("images")
 
-    search = ['고양이', '강아지']
+    search = ['apple', 'banana']
     with futures.ThreadPoolExecutor() as executor:
         results = [executor.submit(ImageCrawling.image_crawling, s) for s in search]
  
